@@ -1,0 +1,18 @@
+.FilterConteiner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.FilterLabel {
+    display: flex;
+    gap: 10px;
+}
+
+.FilterInputs {
+    border: none;
+    background-color: cornflowerblue;
+    color: yellow;
+}
