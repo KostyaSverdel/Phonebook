@@ -1,34 +1,47 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contacts/contactsOperation';
 import css from '../ContactForm/ContactForm.module.css';
+import { selectContacts } from 'redux/contacts/contactsSelectors';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
+  const newUser = useSelector(selectContacts);
+
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [number, setNumber] = useState('');
 
   const handleNameChange = e => {
     setName(e.target.value);
   };
 
   const handleNumberChange = e => {
-    setPhone(e.target.value);
+    setNumber(e.target.value);
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (!name || !phone) {
+    const isNameExist = newUser.find(contact => contact.name === name);
+    const isNumberExist = newUser.find(contact => contact.number === number);
+
+    if (!name || !number) {
       alert('Please provide both name and number');
       return;
     }
+    if (isNameExist) {
+      alert(`${name} is already in contacts!`);
+      return;
+    }
+    if (isNumberExist) {
+      alert(`${number} is already in contacts!`);
+      return;
+    }
     try {
-      await dispatch(addContact({ name, phone }));
+      await dispatch(addContact({ name, number }));
       setName('');
-      setPhone('');
-      alert('Contact is added!');
+      setNumber('');
     } catch (error) {
-      alert('Failed to add contact');
+      console.error(error);
     }
   };
 
@@ -45,12 +58,12 @@ export const ContactForm = () => {
         />
       </label>
       <label className={css.label}>
-        Phone
+        Number
         <input
           className={css.input}
           type="text"
-          name="phone"
-          value={phone}
+          name="number"
+          value={number}
           onChange={handleNumberChange}
         />
       </label>

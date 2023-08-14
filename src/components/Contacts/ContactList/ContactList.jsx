@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   selectError,
   selectFilterContacts,
   selectIsLoading,
 } from 'redux/contacts/contactsSelectors';
-import { fetchContactsAsync } from 'redux/contacts/contactsOperation';
+
+import { fetchContactsAsync } from '../../../redux/contacts/contactsOperation';
+import ContactListItem from '../ContactListItem/ContactListItem';
 
 export const ContactList = () => {
   const error = useSelector(selectError);
@@ -24,34 +27,16 @@ export const ContactList = () => {
   }, [error]);
 
   return (
-    <>
-      {filterContacts.length !== 0 ? (
-        <div style={{ flexGrow: 1, maxWidth: 752 }}>
-          <div>
-            <h6 style={{ marginTop: '2rem', marginBottom: '1rem' }}>
-              CONTACTS: {filterContacts.length} pcs
-            </h6>
-            <ul style={{ listStyle: 'none' }}>
-              {isLoading ? (
-                <div>Loading...</div>
-              ) : (
-                filterContacts.map(contact => (
-                  <li key={contact.id}>
-                    <div>
-                      <div>
-                        <span>{contact.name}</span>
-                        <span>{contact.number}</span>
-                      </div>
-                    </div>
-                  </li>
-                ))
-              )}
-            </ul>
-          </div>
-        </div>
+    <ul>
+      {isLoading ? (
+        <p>Loading...</p>
       ) : (
-        <h4>Please add contact</h4>
+        filterContacts.map(contact => (
+          <ContactListItem key={contact.id} {...contact} />
+        ))
       )}
-    </>
+    </ul>
   );
 };
+
+export default ContactList;
